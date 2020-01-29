@@ -33,7 +33,7 @@ This page allows user to create an account with MoneyManager. They're asked to p
 set a Password for their account. Email address used to register must not yet exist on our database. Upon finishing the Registration,
 user will be directed to their personal Dashboard page without having to log in again.
 
-1. LOG IN page
+2. LOG IN page
 ---------------
 Features:
 
@@ -47,7 +47,7 @@ I have designed this program so that users need to use a valid email address to 
 less likely to forget their emails.
 
 
-2. DASHBOARD page
+3. DASHBOARD page
 ------------------
 Features:
 
@@ -84,7 +84,7 @@ for other months.
 => The goal is to have these features ready by the next update of the program.
 
 
-3. TRANSACTIONS page
+4. TRANSACTIONS page
 ---------------------
 Features:
 
@@ -103,7 +103,7 @@ the information was entered incorrectly.
 have to log those in multiple times.
 
 
-4. ACCOUNT SETTINGS page
+5. ACCOUNT SETTINGS page
 -------------------------
 Features:
 
