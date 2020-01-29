@@ -25,6 +25,7 @@ Author
 Program Design
 ===============
 
+
 1. REGISTER page
 -----------------
 Features:
@@ -32,6 +33,7 @@ Features:
 This page allows user to create an account with MoneyManager. They're asked to provide First Name, Last Name, Email Address, and
 set a Password for their account. Email address used to register must not yet exist on our database. Upon finishing the Registration,
 user will be directed to their personal Dashboard page without having to log in again.
+
 
 2. LOG IN page
 ---------------
