@@ -1,0 +1,108 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+  <!-- Nested Row within Card Body -->
+  <div class="row">
+    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+    <div class="col-lg-7">
+      <div class="p-5">
+        <div class="text-center">
+          <h1 class="h4 text-gray-900 mb-4">Create a MoneyManager Account!</h1>
+        </div>
+        <form class="user" method="POST" action="">
+          {{ form.hidden_tag() }}
+          <div class="form-group row">
+
+            <!-- FIRST NAME -->
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              {% if form.firstname.errors %}
+                {{ form.firstname(class="form-control form-control-user is-invalid", placeholder="First Name") }}
+                <div class="invalid-feedback">
+                  {% for error in form.firstname.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                 {{ form.firstname(class="form-control form-control-user", placeholder="First Name") }}
+              {% endif %}
+            </div>
+
+            <!-- LAST NAME -->
+            <div class="col-sm-6">
+              {% if form.lastname.errors %}
+                {{ form.lastname(class="form-control form-control-user is-invalid", placeholder="Last Name") }}
+                <div class="invalid-feedback">
+                  {% for error in form.lastname.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.lastname(class="form-control form-control-user", placeholder="Last Name") }}
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-group">
+            {% if form.email.errors %}
+              {{ form.email(class="form-control form-control-user is-invalid", placeholder="Email Address") }}
+              <div class="invalid-feedback">
+                {% for error in form.email.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.email(class="form-control form-control-user", placeholder="Email Address") }}
+            {% endif %}
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="form-group row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+              {% if form.password.errors %}
+                {{ form.password(class="form-control form-control-user is-invalid", placeholder="Password") }}
+                <div class="invalid-feedback">
+                  {% for error in form.password.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.password(class="form-control form-control-user", placeholder="Password") }}
+              {% endif %}
+            </div>
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="col-sm-6">
+              {% if form.confirm_password.errors %}
+                {{ form.confirm_password(class="form-control form-control-user is-invalid", placeholder="Confirm Password") }}
+                <div class="invalid-feedback">
+                  {% for error in form.confirm_password.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.confirm_password(class="form-control form-control-user", placeholder="Confirm Password") }}
+              {% endif %}
+            </div>
+          </div>
+          <br>
+
+          <!-- SUBMIT -->
+          <div class="form-group">
+            {{ form.submit(class="btn btn-primary btn-user btn-block") }}
+          </div>
+        </form>
+        <br>
+        <hr>
+        <br>
+        <div class="text-center">
+          <a class="small" href=" {{ url_for('login') }}">Already have an account? Login!</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

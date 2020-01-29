@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add
+{% endblock %}
+
+{% block main %}
+<h2>Add</h2>
+<br>
+<form action="/add" method="post">
+    <!-- TYPE -->
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-label col-sm-2 pt-0">Type</legend>
+            <div class="col-sm-10">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" id="inputType1" value="Income" checked>
+                    <label class="form-check-label" for="gridRadios1">Income</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" id="inputType2" value="Expense">
+                    <label class="form-check-label" for="gridRadios2">Expense</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="type" id="inputType3" value="Debt">
+                    <label class="form-check-label" for="gridRadios3">Debt</label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <!-- AMOUNT -->
+    <div class="form-group row">
+        <label for="amount" class="col-sm-2 col-form-label">Amount US$</label>
+        <div class="col-sm-10">
+            <!-- <input type="number" autocomplete="off" class="form-control" name="amount" id="amount" placeholder="Example: 56.67" min="0.01" step="0.01" required>
+            -->
+            <input type="number" id="amount" autocomplete="off" class="form-control" name="amount" placeholder="Example: 56.67" min="0.01" step="0.01" required>
+        </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-group row">
+        <label for="inputDescription" class="col-sm-2 col-form-label">Description</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="description" id="inputDescription">
+        </div>
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="form-group row">
+        <div class="col-sm-2">Category</div>
+        <div class="col-sm-10">
+            <select class="custom-select mr-sm-2" id="inputCategory" name="category">
+                <option selected disabled value=""></option>
+                <option value="Clothing">Clothing</option>
+                <option value="Education">Education</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Food & Drink">Food & Drink</option>
+                <option value="Health & Beauty">Health & Beauty</option>
+                <option value="Home">Home</option>
+                <option value="Investing">Investing</option>
+                <option value="Payments">Payments</option>
+                <option value="Payments towards Debt">Payments towards Debt</option>
+                <option value="Subscriptions">Subscriptions</option>
+                <option value="Auto & Transportations">Auto & Transportations</option>
+                <option value="Others">Others</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- PAYMENT METHOD -->
+    <div class="form-group row">
+        <div class="col-sm-2">Payment Method</div>
+        <div class="col-sm-10">
+            <select class="custom-select mr-sm-2" id="inputPaymentMethod" name="paymentMethod">
+                <option selected disabled value=""></option>
+                <option value="Cash">Cash</option>
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>
+                <option value="Check">Check</option>
+                <option value="Digital Wallet">Digital Wallet</option>
+                <option value="Money Order">Money Order</option>
+                <option value="Paypal">Paypal</option>
+                <option value="Wire Transfer">Wire Transfer</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- FREQUENCY -->
+    <div class="form-group row">
+        <div class="col-sm-2">Frequency</div>
+        <div class="col-sm-10">
+            <select class="custom-select mr-sm-2" id="inputFrequency" name="frequency" required>
+                <option selected disabled value=""></option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+                <option value="Unrepeatable">Unrepeatable</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- DATE -->
+    <div class="form-group row">
+        <div class="col-sm-2">Date</div>
+        <div class='col-sm-10'>
+            <input type="date" class="form-control" name="addDate">
+        </div>
+    </div>
+
+    <br><br>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

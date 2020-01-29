@@ -1,0 +1,224 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Account Settings
+{% endblock %}
+
+{% block main %}
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Account Settings</h1>
+<div class="row">
+  <div class="col-lg-3">
+    <div class="card-body">
+      <div class="row no-gutters align-items-center">
+        <img class="img-profile-acc rounded-circle" src="{{ image_file }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-9">
+
+    <!-- Dropdown Card Example -->
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+
+        <h6 class="m-0 font-weight-bold text-info text-lg">{{ user[0]["firstName"] }} {{ user[0]["lastName"] }}</h6>
+        <div class="dropdown no-arrow">
+          <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="/account_settings/update" data-toggle="modal" data-target="#editModal">
+              <i class="fas fa-pencil-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+              Edit Information
+            </a>
+            <a class="dropdown-item" href="/account_settings/reset_password" data-toggle="modal" data-target="#resetPasswordModal">
+              <i class="fas fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
+              Reset Password
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3"><p>First Name:</p></div>
+          <div class="col-sm-9 text-info"><p>{{ user[0]["firstName"] }}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3"><p>Last Name:</p></div>
+          <div class="col-sm-9 text-info"><p>{{ user[0]["lastName"] }}</p></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3"><p>Email Address:</p></div>
+          <div class="col-sm-9 text-info"><p><a href="mailto:{{ user[0]["email"] }}">{{ user[0]["email"] }}</a></p></div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3"><p>Preferred Currency:</p></div>
+          <div class="col-sm-9 text-info"><p>USD</p></div>
+        </div>
+      </div>
+
+      <!-- EDIT INFORMATION Modal-->
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <form class="user" method="POST" action="/account_settings/update" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+              <div class="modal-header">
+                <h5 class="modal-title text-info" id="editModalLabel">Edit Information</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="p-5">
+                  <div class="form-group row">
+
+                    <!-- FIRST NAME -->
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                      <label class="text-info"><small>{{ form.firstname.label }}</small></label>
+                      {% if form.firstname.errors %}
+                        {{ form.firstname(class="form-control form-control-user is-invalid") }}
+                        <div class="invalid-feedback">
+                          {% for error in form.firstname.errors %}
+                            <span>{{ error }}</span>
+                          {% endfor %}
+                        </div>
+                      {% else %}
+                         {{ form.firstname(class="form-control form-control-user") }}
+                      {% endif %}
+                    </div>
+
+                    <!-- LAST NAME -->
+                    <div class="col-sm-6">
+                      <label class="text-info"><small>{{ form.lastname.label }}</small></label>
+                      {% if form.lastname.errors %}
+                        {{ form.lastname(class="form-control form-control-user is-invalid") }}
+                        <div class="invalid-feedback">
+                          {% for error in form.lastname.errors %}
+                            <span>{{ error }}</span>
+                          {% endfor %}
+                        </div>
+                      {% else %}
+                        {{ form.lastname(class="form-control form-control-user") }}
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <!-- EMAIL -->
+                  <div class="form-group">
+                    <label class="text-info"><small>{{ form.email.label }}</small></label>
+                    {% if form.email.errors %}
+                      {{ form.email(class="form-control form-control-user is-invalid", id="inputEmail") }}
+                      <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form.email(class="form-control form-control-user", id="inputEmail") }}
+                    {% endif %}
+                  </div>
+
+                  <!-- PROFILE PICTURE UPLOAD -->
+                  <div class="form-group">
+                    <label class="text-info"><small>{{ form.picture.label }}</small></label>
+                    <div class="form-control-file"><small>{{ form.picture }}</small></div>
+                    <p><small>Only .jpg or .png allowed</small></p>
+                    {% if form.picture.errors %}
+                      {% for error in form.picture.errors %}
+                        <span class="text-danger">{{ error }}</span></br>
+                      {% endfor %}
+                    {% endif %}
+                  </div>
+
+                  <!-- BUTTONS -->
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    {{ form.submit(class="btn btn-info") }}
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESET PASSWORD Modal-->
+      <div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <form class="user" method="POST" action="/account_settings/reset_password">
+            {{ form_pw.hidden_tag() }}
+              <div class="modal-header">
+                <h5 class="modal-title text-info" id="resetPasswordModalLabel">Reset Password</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="p-5">
+                  <!-- CURRENT PASSWORD -->
+                  <div class="form-group">
+                    <label class="text-info"><small>{{ form_pw.current_password.label }}</small></label>
+                    {% if form_pw.current_password.errors %}
+                      {{ form_pw.current_password(class="form-control form-control-user is-invalid") }}
+                      <div class="invalid-feedback">
+                        {% for error in form_pw.current_password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                       {{ form_pw.current_password(class="form-control form-control-user") }}
+                    {% endif %}
+                  </div>
+
+                  <!-- NEW PASSWORD -->
+                  <div class="form-group">
+                    <label class="text-info"><small>{{ form_pw.new_password.label }}</small></label>
+                    {% if form_pw.new_password.errors %}
+                      {{ form_pw.new_password(class="form-control form-control-user is-invalid") }}
+                      <div class="invalid-feedback">
+                        {% for error in form_pw.new_password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form_pw.new_password(class="form-control form-control-user") }}
+                    {% endif %}
+                  </div>
+
+                  <!-- CONFIRM NEW PASSWORD -->
+                  <div class="form-group">
+                    <label class="text-info"><small>{{ form_pw.confirm_new_password.label }}</small></label>
+                    {% if form_pw.confirm_new_password.errors %}
+                      {{ form_pw.confirm_new_password(class="form-control form-control-user is-invalid") }}
+                      <div class="invalid-feedback">
+                        {% for error in form_pw.confirm_new_password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      {{ form_pw.confirm_new_password(class="form-control form-control-user") }}
+                    {% endif %}
+                  </div>
+
+                  <!-- BUTTONS -->
+                  <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    {{ form_pw.submit(class="btn btn-info") }}
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

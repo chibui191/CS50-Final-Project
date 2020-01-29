@@ -1,0 +1,62 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+  <!-- Nested Row within Card Body -->
+  <div class="row">
+    <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+    <div class="col-lg-6">
+      <div class="p-5">
+        <div class="text-center">
+          <h1 class="h4 text-gray-900 mb-4">Welcome Back to MoneyManager!</h1>
+          <h1 class="h4 text-gray-900 mb-4">Please Log In</h1>
+        </div>
+        <form class="user" method="POST" action="">
+          {{ form.hidden_tag() }}
+
+          <!-- EMAIL -->
+          <div class="form-group">
+            {% if form.email.errors %}
+              {{ form.email(class="form-control form-control-user is-invalid", placeholder="Email Address") }}
+              <div class="invalid-feedback">
+                {% for error in form.email.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.email(class="form-control form-control-user", placeholder="Email Address") }}
+            {% endif %}
+          </div>
+
+          <!-- EMAIL -->
+          <div class="form-group">
+            {% if form.password.errors %}
+              {{ form.password(class="form-control form-control-user is-invalid", placeholder="Password") }}
+              <div class="invalid-feedback">
+                {% for error in form.password.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.password(class="form-control form-control-user", placeholder="Password") }}
+            {% endif %}
+          </div>
+          <br>
+          <!-- LOG IN BUTTON -->
+          <div class="form-group">
+            {{ form.submit(class="btn btn-primary btn-user btn-block") }}
+          </div>
+        </form>
+        <br>
+        <hr>
+        <br>
+        <div class="text-center">
+          <a class="small" href="/register">Create an Account!</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

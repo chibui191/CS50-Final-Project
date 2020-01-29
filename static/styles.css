@@ -1,0 +1,37 @@
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: 100%;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+h4
+{
+    text-align: left;
+}
+
+h2
+{
+    text-transform: uppercase;
+}

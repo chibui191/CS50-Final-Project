@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block main %}
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    <h4>{{ currentMonthFull }} - {{ currentYear }}</h4>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+
+    {% set ns = namespace(balance = 0) %}
+    <!-- Total Incomes Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Incomes</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                <p>{{ totalIncomes[0]["sumIncome"]|usd }}</p>
+                {% set ns.balance = ns.balance + totalIncomes[0]["sumIncome"] %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Expenses Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Expenses</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                    <p>{{ -totalExpenses[0]["sumExpense"]|usd }}</p>
+                    {% set ns.balance = ns.balance + totalExpenses[0]["sumExpense"] %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debt Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                Debt (due this month)
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                <p>{{ totalDebt[0]["sumDebt"]|usd }}</p>
+                {% set ns.balance = ns.balance - debtsPaid[0]["sumPaid"] %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Balance Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Current Balance</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ ns.balance|usd }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+
+    <!-- Content Column -->
+    <div class="col-lg-12 mb-4">
+
+      <!-- Income Goals Current Status -->
+      <div class="card shadow mb-4">
+        <a href="#collapseIncomeCard" class="card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseIncomeCard">
+          <h4 class="m-0 font-weight-bold text-success">Income Goals</h4>
+          <h6 class="m-0 font-weight-bold text-secondary">{{ currentMonthFull }} - {{ currentYear }}</h6>
+        </a>
+        <div class="collapse hide" id="collapseIncomeCard">
+          <div class="card-body ml-2 mr-2">
+            <div class="table-responsive">
+              <table id="incomeGoalsTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th class="col-md-8"></th>
+                    <th class="col-md-2" style="text-align: right"><small><strong>GOAL</strong></small></th>
+                    <th class="col-md-2" style="text-align: right"><small><strong>REMAINING</strong></small></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in goal_rows if row.goal_amount > 0 %}
+                    {% set percent = row.current_amount/row.goal_amount*100 %}
+                    <tr>
+                      <td><h4 class="small font-weight-bold">{{ row.goal_type }}<span class="float-right">{{ row.current_amount|usd }} - {{ percent|percentage }}</span></h4>
+                        <div class="progress mb-4">
+                          <div class="progress-bar bg-success" role="progressbar" style="width: {{ percent }}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td style="text-align: right"><small>{{ row.goal_amount|usd }}</small></td>
+                      {% if percent < 100 %}
+                        <td style="text-align: right"><small>{{ (row.goal_amount-row.current_amount)|usd }}</small></td>
+                      {% elif percent > 100 %}
+                        <td class="text-success" style="text-align: right"><small>{{ -(row.goal_amount-row.current_amount)|usd }} over</small></td>
+                      {% else %}
+                        <td class="text-success" style="text-align: right"><small>{{ 0|usd }}</small></td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Planned Budgets Current Status -->
+      <div class="card shadow mb-4">
+        <a href="#collapseBudgetCard" class="card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseBudgetCard">
+          <h4 class="m-0 font-weight-bold text-danger">Planned Budgets</h4>
+          <h6 class="m-0 font-weight-bold text-secondary">{{ currentMonthFull }} - {{ currentYear }}</h6>
+        </a>
+        <div class="collapse hide" id="collapseBudgetCard">
+          <div class="card-body ml-2 mr-2">
+            <div class="table-responsive">
+              <table id="plannedBudgetsTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th class="col-md-8"></th>
+                    <th class="col-md-2" style="text-align: right"><small><strong>BUDGET</strong></small></th>
+                    <th class="col-md-2" style="text-align: right"><small><strong>REMAINING</strong></small></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in budget_rows if row.budget_amount > 0 %}
+                    {% set percent = -row.current_expense/row.budget_amount*100 %}
+                    <tr>
+                      <td><h4 class="small font-weight-bold">{{ row.budget_type }}<span class="float-right">{{ -row.current_expense|usd }} - {{ percent|percentage }}</span></h4>
+                        <div class="progress mb-4">
+                          <div class="progress-bar bg-danger" role="progressbar" style="width: {{ percent }}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td style="text-align: right"><small>{{ row.budget_amount|usd }}</small></td>
+                      {% if percent < 100 %}
+                        <td style="text-align: right"><small>{{ (row.budget_amount+row.current_expense)|usd }}</small></td>
+                      {% elif percent > 100 %}
+                        <td class="text-danger" style="text-align: right"><small>{{ -(row.budget_amount+row.current_expense)|usd }} over</small></td>
+                      {% else %}
+                        <td class="text-danger" style="text-align: right"><small>{{ 0|usd }}</small></td>
+                      {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Debt Management Status -->
+      <div class="card shadow mb-4">
+        <a href="#collapseDebtCard" class="card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseDebtCard">
+          <h4 class="m-0 font-weight-bold text-warning">Debt Management</h4>
+        </a>
+        <div class="collapse hide" id="collapseDebtCard">
+          <div class="card-body ml-2 mr-2">
+            <div class="table-responsive">
+              <table id="manageDebtTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th class="col-md-5"></th>
+                    <th class="col-md-2" style="text-align: right"><small><strong>INITIAL BALANCE OWED</strong></small></th>
+                    <th class="col-md-2" style="text-align: right"><small><strong>REMAINING</strong></small></th>
+                    <th class="col-md-1" style="text-align: right"><small><strong>ANNUAL INTEREST RATE</strong></small></th>
+                    <th class="col-md-1" style="text-align: right"><small><strong>TARGET PAYOFF DATE</strong></small></th>
+                    <th class="col-md-1" style="text-align: right"><small><strong>TARGET MONTHLY PAYMENT</strong></small></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for debt in debts if debt.current_amount > 0 %}
+                    {% set percent = (debt.initial_amount - debt.current_amount) / debt.initial_amount * 100 %}
+                    {% if debt.monthsDiff < 1 %}
+                      <tr>
+                        <td><h4 class="small font-weight-bold">{{ debt.category }} - ({{ debt.description }})<span class="float-right">{{ (debt.initial_amount - debt.current_amount)|usd }} - {{ percent|percentage }}</span></h4>
+                          <div class="progress mb-4">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ percent }}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td style="text-align: right"><small>{{ debt.initial_amount|usd }}</small></td>
+                        <td style="text-align: right"><small>{{ debt.current_amount|usd }}</small></td>
+                        <td style="text-align: center"><small>{{ debt.interest }}%</small></td>
+                        <td style="text-align: right"><small>{{ debt.payoff_date }}</small></td>
+                        <td style="text-align: right"><small>{{ (debt.initial_amount*(1+debt.interest/1200))|usd }}</small></td>
+                      </tr>
+                    {% else %}
+                      {% set n = debt.monthsDiff %}
+                      {% set r = debt.interest/1200 %}
+                      {% set D = ((1 + r)**n - 1) / (r * ((1 + r)**n)) %}
+                      <tr>
+                        <td><h4 class="small font-weight-bold">{{ debt.category }} - ({{ debt.description }})<span class="float-right">{{ (debt.initial_amount - debt.current_amount)|usd }} - {{ percent|percentage }}</span></h4>
+                          <div class="progress mb-4">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: {{ percent }}%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </td>
+                        <td style="text-align: right"><small>{{ debt.initial_amount|usd }}</small></td>
+                        <td style="text-align: right"><small>{{ debt.current_amount|usd }}</small></td>
+                        <td style="text-align: center"><small>{{ debt.interest }}%</small></td>
+                        <td style="text-align: right"><small>{{ debt.payoff_date }}</small></td>
+                        <td style="text-align: right"><small>{{ (debt.initial_amount/D)|usd }}</small></td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+{% endblock %}
+
+

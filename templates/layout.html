@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MoneyManager - {% block title %}{% endblock %}</title>
+
+  <!-- Custom fonts for this template-->
+  <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
+
+  <!-- Custom styles for transaction table page -->
+  <link href="/static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15 text-warning">
+          M
+        </div>
+        <div class="sidebar-brand-icon rotate-n-15 text-info">
+          M
+        </div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item active">
+        <a class="nav-link" href="/">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Dashboard</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAdd" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-plus"></i>
+          <span>Add</span>
+        </a>
+        <div id="collapseAdd" class="collapse" aria-labelledby="headingAdd" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item text-success" href="/add/income" data-toggle="modal" data-target="#addIncomeModal">Income</a>
+            <a class="collapse-item text-danger" href="/add/expense" data-toggle="modal" data-target="#addExpenseModal">Expense</a>
+            <a class="collapse-item text-warning" href="/add/debt_payment" data-toggle="modal" data-target="#debtPaymentModal">Payment towards Debt</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSetGoals" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-bullseye"></i>
+          <span>Set Goals</span>
+        </a>
+        <div id="collapseSetGoals" class="collapse" aria-labelledby="headingSetGoals" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item text-success" href="/set_goals/incomes" data-toggle="modal" data-target="#setIncomeGoalModal">Set Income Goals</a>
+            <a class="collapse-item text-danger" href="/set_goals/budgets" data-toggle="modal" data-target="#planBudgetModal">Plan Budgets</a>
+            <a class="collapse-item text-warning" href="/set_goals/debts" data-toggle="modal" data-target="#manageDebtModal">Manage Debts</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Transactions -->
+      <li class="nav-item">
+        <a class="nav-link" href="/transactions">
+          <i class="fas fa-fw fa-list"></i>
+          <span>Transactions</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Search -->
+          <h4 class="m-0 font-weight-bold text-warning ml-3">Money</h6><h4 class="m-0 font-weight-bold text-info">Manager</h6>
+
+          <!-- Topbar Navbar -->
+          {% if session.user_id %}
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+            <li class="nav-item dropdown no-arrow d-sm-none">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user[0]["firstName"] }} {{ user[0]["lastName"] }}</span>
+                <img class="img-profile rounded-circle" src="{{ image_file }}">
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="/account_settings">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Account Settings
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+          </ul>
+          {% endif %}
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <header>
+                      {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} text-center" role="alert">
+                            {{ message }}
+                        </div>
+                      {% endfor %}
+                    </header>
+                {% endif %}
+            {% endwith %}
+
+            {% block main %}{% endblock %}
+        </div>
+        <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; MoneyManager 2019</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD EXPENSE Modal-->
+  <div class="modal fade" id="addExpenseModal" tabindex="-1" role="dialog" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content border-left-danger">
+        <form method="POST" action="/add/expense">
+        {{ form_adex.hidden_tag() }}
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="addExpenseModalLabel">Add Expense</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-5">
+              <div class="form-group row">
+                <!-- AMOUNT -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_adex.amount.label }}</small></label>
+                  {% if form_adex.amount.errors %}
+                    {{ form_adex.amount(class="form-control form-control-user is-invalid", type="number") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adex.amount.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_adex.amount(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_adex.category.label }}</small></label>
+                  {% if form_adex.category.errors %}
+                    {{ form_adex.category(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adex.category.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_adex.category(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- DESCRIPTION -->
+              <div class="form-group">
+                <label class="text-secondary"><small>{{ form_adex.description.label }}</small></label>
+                {% if form_adex.description.errors %}
+                  {{ form_adex.description(class="form-control form-control-user is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form_adex.description.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  {{ form_adex.description(class="form-control form-control-user") }}
+                {% endif %}
+              </div>
+
+              <div class="form-group row">
+                <!-- PAYMENT METHOD -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_adex.payment_method.label }}</small></label>
+                  {% if form_adex.payment_method.errors %}
+                    {{ form_adex.payment_method(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adex.payment_method.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_adex.payment_method(class="form-control form-control-user") }}
+                  {% endif %}
+                  <p><small>(If 'Others,' please specify in the Description section)</small></p>
+                </div>
+
+                <!-- PAYMENT DATE -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_adex.post_date.label }}</small></label>
+                  {% if form_adex.post_date.errors %}
+                    {{ form_adex.post_date(class="form-control form-control-user is-invalid", type="date") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adex.post_date.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_adex.post_date(class="form-control form-control-user", type="date") }}
+                  {% endif %}
+                </div>
+              </div>
+              <!-- PAYMENT STATUS -->
+              <div class="form-group">
+                <div class="form-check">
+                  {{ form_adex.status(class="form-check-input") }}
+                  {{ form_adex.status.label(class="form-check-label") }}
+                </div>
+              </div>
+
+              <!-- BUTTONS -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                {{ form_adex.submit(class="btn btn-danger") }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD INCOME Modal-->
+  <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content border-left-success ">
+        <form method="POST" action="/add/income">
+        {{ form_adin.hidden_tag() }}
+          <div class="modal-header">
+            <h5 class="modal-title text-success" id="addIncomeModalLabel">Add Income</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-5">
+              <div class="form-group row">
+                <!-- AMOUNT -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_adin.amount.label }}</small></label>
+                  {% if form_adin.amount.errors %}
+                    {{ form_adin.amount(class="form-control form-control-user is-invalid", type="number") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adin.amount.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_adin.amount(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_adin.category.label }}</small></label>
+                  {% if form_adin.category.errors %}
+                    {{ form_adin.category(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adin.category.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_adin.category(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- DESCRIPTION -->
+              <div class="form-group">
+                <label class="text-secondary"><small>{{ form_adin.description.label }}</small></label>
+                {% if form_adin.description.errors %}
+                  {{ form_adin.description(class="form-control form-control-user is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form_adin.description.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  {{ form_adin.description(class="form-control form-control-user") }}
+                {% endif %}
+              </div>
+
+              <div class="form-group row">
+                <!-- PAYMENT METHOD -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_adin.payment_method.label }}</small></label>
+                  {% if form_adin.payment_method.errors %}
+                    {{ form_adin.payment_method(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adin.payment_method.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_adin.payment_method(class="form-control form-control-user") }}
+                  {% endif %}
+                  <p><small>(If 'Others,' please specify in the Description section)</small></p>
+                </div>
+
+                <!-- RECEIVE DATE -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_adin.post_date.label }}</small></label>
+                  {% if form_adin.post_date.errors %}
+                    {{ form_adin.post_date(class="form-control form-control-user is-invalid", type="date") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adin.post_date.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_adin.post_date(class="form-control form-control-user", type="date") }}
+                  {% endif %}
+                </div>
+              </div>
+              <!-- PAYMENT STATUS -->
+              <div class="form-group">
+                <div class="form-check">
+                  {{ form_adin.status(class="form-check-input") }}
+                  {{ form_adin.status.label(class="form-check-label") }}
+                </div>
+              </div>
+
+
+              <!-- BUTTONS -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                {{ form_adin.submit(class="btn btn-success") }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD PAYMENT TOWARDS DEBT Modal-->
+  <div class="modal fade" id="debtPaymentModal" tabindex="-1" role="dialog" aria-labelledby="debtPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content border-left-warning ">
+        <form method="POST" action="/add/debt_payment">
+        {{ form_adde.hidden_tag() }}
+          <div class="modal-header">
+            <h5 class="modal-title text-warning" id="debtPaymentModalLabel">Add Payment towards Debt</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-5">
+              <div class="form-group row">
+                <!-- AMOUNT -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_adde.amount.label }}</small></label>
+                  {% if form_adde.amount.errors %}
+                    {{ form_adde.amount(class="form-control form-control-user is-invalid", type="number") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adde.amount.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_adde.amount(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- DEBT -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_adde.debt.label }}</small></label>
+                  {% if form_adde.debt.errors %}
+                    {{ form_adde.debt(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_adde.debt.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_adde.debt(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- PAYMENT DATE -->
+              <div class="form-group">
+                <label class="text-secondary"><small>{{ form_adde.payment_date.label }}</small></label>
+                {% if form_adde.payment_date.errors %}
+                  {{ form_adde.payment_date(class="form-control form-control-user is-invalid", type="date") }}
+                  <div class="invalid-feedback">
+                    {% for error in form_adde.payment_date.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  {{ form_adde.payment_date(class="form-control form-control-user", type="date") }}
+                {% endif %}
+              </div>
+
+              <!-- BUTTONS -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                {{ form_adde.submit(class="btn btn-warning") }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SET INCOME GOALS Modal-->
+  <div class="modal fade" id="setIncomeGoalModal" tabindex="-1" role="dialog" aria-labelledby="setIncomeGoalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content border-left-success ">
+        <form method="POST" action="/set_goals/incomes">
+        {{ form_ingo.hidden_tag() }}
+          <div class="modal-header">
+            <h5 class="modal-title text-success" id="setIncomeGoalModalLabel">Set Income Goal</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-5">
+              <div class="form-group row">
+                <!-- GOAL TYPE -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_ingo.goal_type.label }}</small></label>
+                  {% if form_ingo.goal_type.errors %}
+                    {{ form_ingo.goal_type(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_ingo.goal_type.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_ingo.goal_type(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- AMOUNT -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_ingo.amount.label }}</small></label>
+                  {% if form_ingo.amount.errors %}
+                    {{ form_ingo.amount(class="form-control form-control-user is-invalid", type="number") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_ingo.amount.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_ingo.amount(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <!-- TARGET MONTH -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_ingo.target_month.label }}</small></label>
+                  {% if form_ingo.target_month.errors %}
+                    {{ form_ingo.target_month(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_ingo.target_month.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_ingo.target_month(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- TARGET YEAR -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_ingo.target_year.label }}</small></label>
+                  {% if form_ingo.target_year.errors %}
+                    {{ form_ingo.target_year(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_ingo.target_year.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_ingo.target_year(class="form-control form-control-user", type="date") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- BUTTONS -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                {{ form_ingo.submit(class="btn btn-success") }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN BUDGET Modal-->
+  <div class="modal fade" id="planBudgetModal" tabindex="-1" role="dialog" aria-labelledby="planBudgetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content border-left-danger ">
+        <form method="POST" action="/set_goals/budgets">
+        {{ form_bud.hidden_tag() }}
+          <div class="modal-header">
+            <h5 class="modal-title text-danger" id="planBudgetModalLabel">Plan Budgets</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-5">
+              <div class="form-group row">
+                <!-- BUDGET TYPE -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_bud.budget_type.label }}</small></label>
+                  {% if form_bud.budget_type.errors %}
+                    {{ form_bud.budget_type(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_bud.budget_type.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_bud.budget_type(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- AMOUNT -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_bud.amount.label }}</small></label>
+                  {% if form_bud.amount.errors %}
+                    {{ form_bud.amount(class="form-control form-control-user is-invalid", type="number") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_bud.amount.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_bud.amount(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <!-- TARGET MONTH -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_bud.target_month.label }}</small></label>
+                  {% if form_bud.target_month.errors %}
+                    {{ form_bud.target_month(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_bud.target_month.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_bud.target_month(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- TARGET YEAR -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_bud.target_year.label }}</small></label>
+                  {% if form_bud.target_year.errors %}
+                    {{ form_bud.target_year(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_bud.target_year.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_bud.target_year(class="form-control form-control-user", type="date") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- BUTTONS -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                {{ form_bud.submit(class="btn btn-danger") }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEBT MANAGEMENT Modal-->
+  <div class="modal fade" id="manageDebtModal" tabindex="-1" role="dialog" aria-labelledby="manageDebtModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content border-left-warning ">
+        <form method="POST" action="/set_goals/debts">
+        {{ form_made.hidden_tag() }}
+          <div class="modal-header">
+            <h5 class="modal-title text-warning" id="manageDebtModalLabel">Debt Management</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="p-5">
+              <div class="form-group row">
+                <!-- BALANCE OWED - AMOUNT -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_made.amount.label }}</small></label>
+                  {% if form_made.amount.errors %}
+                    {{ form_made.amount(class="form-control form-control-user is-invalid", type="number") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_made.amount.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_made.amount(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_made.category.label }}</small></label>
+                  {% if form_made.category.errors %}
+                    {{ form_made.category(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_made.category.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_made.category(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- DESCRIPTION -->
+              <div class="form-group">
+                <label class="text-secondary"><small>{{ form_made.description.label }}</small></label>
+                {% if form_made.description.errors %}
+                  {{ form_made.description(class="form-control form-control-user is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form_made.description.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  {{ form_made.description(class="form-control form-control-user") }}
+                {% endif %}
+                <p><small>(Please limit to 30 characters only)</small></p>
+              </div>
+
+              <div class="form-group row">
+                <!-- ANNUAL INTEREST RATE -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label class="text-secondary"><small>{{ form_made.interest.label }}</small></label>
+                  {% if form_made.interest.errors %}
+                    {{ form_made.interest(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_made.interest.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                     {{ form_made.interest(class="form-control form-control-user") }}
+                  {% endif %}
+                </div>
+
+                <!-- TARGET PAYOFF DATE -->
+                <div class="col-sm-6">
+                  <label class="text-secondary"><small>{{ form_made.payoff_date.label }}</small></label>
+                  {% if form_made.payoff_date.errors %}
+                    {{ form_made.payoff_date(class="form-control form-control-user is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form_made.payoff_date.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form_made.payoff_date(class="form-control form-control-user", type="date") }}
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- BUTTONS -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                {{ form_made.submit(class="btn btn-warning") }}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="/static/js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins - charts -->
+  <script src="/static/vendor/chart.js/Chart.min.js"></script>
+
+  <!-- Page level plugins - datatables -->
+  <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts - charts -->
+  <script src="/static/js/demo/chart-area-demo.js"></script>
+  <script src="/static/js/demo/chart-pie-demo.js"></script>
+  <script src="/static/js/demo/chart-bar-demo.js"></script>
+
+  <!-- Page level custom scripts - datatables -->
+  <script src="/static/js/demo/datatables-demo.js"></script>
+
+</body>
+
+</html>
+
