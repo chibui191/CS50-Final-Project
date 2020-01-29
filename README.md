@@ -47,7 +47,7 @@ I have designed this program so that users need to use a valid email address to 
 less likely to forget their emails.
 
 
-1. DASHBOARD page
+2. DASHBOARD page
 ------------------
 Features:
 
@@ -84,7 +84,7 @@ for other months.
 => The goal is to have these features ready by the next update of the program.
 
 
-2. TRANSACTIONS page
+3. TRANSACTIONS page
 ---------------------
 Features:
 
@@ -103,7 +103,7 @@ the information was entered incorrectly.
 have to log those in multiple times.
 
 
-3. ACCOUNT SETTINGS page
+4. ACCOUNT SETTINGS page
 -------------------------
 Features:
 
