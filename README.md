@@ -1,11 +1,9 @@
-======================
 Project: MoneyManager
 ======================
 This is a personal finance web application that allows users to track their income streams and expenses on a monthly basis,
 as well as to manage any outstanding debts they might have.
 
 
-=============
 Requirements
 =============
 1. cs50
@@ -14,51 +12,45 @@ Requirements
 4. requests
 5. flask-wtf
 
-
-===========
 Built With
 ===========
 1. Flask
 2. Bootstrap theme - SB Admin 2 (https://startbootstrap.com/themes/sb-admin-2/)
 3. SQLite
 
-
-=======
 Author
 =======
 - Chi Phuong Bui
 
-
-===============
 Program Design
 ===============
 
 1. REGISTER page
----------
+-----------------
 Features:
----------
+
 This page allows user to create an account with MoneyManager. They're asked to provide First Name, Last Name, Email Address, and
 set a Password for their account. Email address used to register must not yet exist on our database. Upon finishing the Registration,
 user will be directed to their personal Dashboard page without having to log in again.
 
 1. LOG IN page
----------
+---------------
 Features:
----------
+
 This page allows user to log in their account. User are asked to provide email address and password. If they don't have an account
 yet and would like to have one, they can click on 'Create an Account!,' which would direct them to the Register page.
-------------
+
 Limitations:
-------------
+
 Users are not able to access their accounts if they forgot their passwords yet. To reduce the chance of people losing their accounts,
 I have designed this program so that users need to use a valid email address to log in (instead of a username) because people are
 less likely to forget their emails.
 
 
 1. DASHBOARD page
----------
+------------------
 Features:
----------
+
 This is where the current statuses of user's income(s) and expense(s), goals, budgets, as well as debt management information
 are displayed.
 - On the top are "Total Incomes," "Total Expenses," "Total Debts (due in this month)," and "Current Balance."
@@ -78,9 +70,9 @@ provide estimated amount of money to be paid each month for users to reach their
 is added in, the progress percentage of that debt will also be updated automatically to give user an idea of how much they've paid
 and how much they have left. Once the debt is paid off 100%, it would be removed out of the table. User can only log in payments towards
 debts that they have added into the Debt Management section previously.
-------------
+
 Limitations:
-------------
+
 - Users are not yet able to edit their goals/budgets individually from Dashboard page. For now, the only way for to update the
 money amount for a goal/budget is by setting another goal/budget for an amount of the difference. For example,
 if I currently have an Income Goal of $2,000 from Investment, and I would like to change it to $1,500 only, I would then need to go
@@ -93,15 +85,15 @@ for other months.
 
 
 2. TRANSACTIONS page
----------
+---------------------
 Features:
----------
+
 This is a list of all the income(s) and expense(s) that user have logged in. There're a total of 6 columns - Category, Description,
 Amount, Payment Method, Status, and Date. In addition, a search bar is provided for user to look for specific transactions if they
 want. User can also choose to see 10-25-50-100 entries per page.
-------------
+
 Limitations:
-------------
+
 - There is no record of Payments towards Debts yet.
 - Similar to Dashboard's Income Goals & Planned Budgets, users are not yet able to individually edit/delete their transactions if
 the information was entered incorrectly.
@@ -112,19 +104,19 @@ have to log those in multiple times.
 
 
 3. ACCOUNT SETTINGS page
----------
+-------------------------
 Features:
----------
+
 This page displays user's current personal information (First Name, Last Name, Email Address, and Preferred Currency). They can also
 choose to reset their password, edit their information (names), change email address, and/or upload a new profile picture.
-------------
+
 Limitations:
-------------
+
 In the future updates of this program, users should be able to set their location, preferred currency, and to have the option to have
 transaction entries in other currencies converted to their preferred one as well.
 
 
--------
+
 OVERALL
 -------
 Currently the program is still in its very early stages. There're many more features that could have been added to make the logging
@@ -135,7 +127,6 @@ how many percent of their incomes should go into each category ideally). Reminde
 or debt payment reminders can also be very useful. Savings tracking would be another great feature to have as well.
 
 
-================
 Acknowledgments
 ================
 1. Corey Schafer's Flask Tutorials series (https://www.youtube.com/playlist?list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH)
